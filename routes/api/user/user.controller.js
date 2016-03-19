@@ -1,11 +1,13 @@
 const Board = require('../board/board.model');
+const User = require('./user.model');
 
 const controller = {};
 
 controller.newPlayer = (req, res) => {
-  return Board.createBoardWithOnePlayer(req.body.name)
-  .then((result) => {
-    res.json(result);
+  const playerId = User.getUniqueId();
+  return Board.createBoardWithOnePlayer(playerId, req.body.name)
+  .then((boardId) => {
+    res.json({playerId: playerId, boardId: boardId});
   });
 };
 

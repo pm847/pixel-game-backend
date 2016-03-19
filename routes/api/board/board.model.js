@@ -37,9 +37,9 @@ let BoardSchema = new Schema({
 /**
  * @returns Promise
  */
-BoardSchema.statics.createBoardWithOnePlayer = function(playerName) {
+BoardSchema.statics.createBoardWithOnePlayer = function(playerIdHexString, playerName) {
   let boardId = new ObjectId();
-  let playerId = new ObjectId();
+  let playerId = new ObjectId(playerIdHexString);
   return this.create({
     _id: boardId,
     board: {
@@ -58,7 +58,7 @@ BoardSchema.statics.createBoardWithOnePlayer = function(playerName) {
       is_achieved: false
     }]
   })
-  .then(() => ({ playerId: playerId.toString(), boardId: boardId.toString() }));
+  .then(() => (boardId.toString()));
 };
 
 const Board = mongoose.model('Board', BoardSchema);
