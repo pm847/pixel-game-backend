@@ -54,7 +54,6 @@ controller.nextMove = (req, res) => {
   assert(req.body.boardId, 'missing boardId');
   assert(/^[0-9a-fA-F]{24}$/.test(req.body.boardId), 'invalid boardId');
   assert(req.body.nextRound, 'missing nextRound');
-  assert(req.body.nextMove, 'missing nextMove');
   assert(req.body.nextMoveX, 'missing nextMoveX');
   assert(req.body.nextMoveY, 'missing nextMoveY');
 
