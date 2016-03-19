@@ -24,6 +24,7 @@ let BoardSchema = new Schema({
   },
   round: { type: Number, default: 0, },
   players: [PlayerScheme],
+  numOfPlayers: { type: Number, default: 0, },
   goals: [GoalSchema],
   origin: {
     x: { type: Number, default: 5 },
@@ -52,6 +53,7 @@ BoardSchema.statics.createBoardWithOnePlayer = function(playerIdHexString, playe
       x: 5,
       y: 5
     }],
+    numOfPlayers: 1,
     goals: [{
       x: 10,
       y: 20,
@@ -59,6 +61,43 @@ BoardSchema.statics.createBoardWithOnePlayer = function(playerIdHexString, playe
     }]
   })
   .then(() => (boardId.toString()));
+};
+
+/**
+ * @returns Promise
+ */
+BoardSchema.statics.findAvailableBoard = function() {
+  return this.findOne({
+    numOfPlayers: {
+      $lt: 20
+    }
+  })
+  .then((board) => {
+    if (board)
+      return board._id.toString();
+    else
+      return null;
+  });
+};
+
+BoardSchema.statics.insertNewPlayer = function(boardIdHexString, playerIdHexString, playerName) {
+  let boardId = new ObjectId(boardIdHexString);
+  let playerId = new ObjectId(playerIdHexString);
+  return this.update({
+    _id: boardId
+  }, {
+    $push: {
+      players: {
+        id: playerId,
+        name: playerName,
+        x: 5,
+        y: 5
+      }
+    },
+    $inc: {
+      numOfPlayers: 1
+    }
+  });
 };
 
 const Board = mongoose.model('Board', BoardSchema);

@@ -5,9 +5,22 @@ const controller = {};
 
 controller.newPlayer = (req, res) => {
   const playerId = User.getUniqueId();
-  return Board.createBoardWithOnePlayer(playerId, req.body.name)
+  Board.findAvailableBoard()
   .then((boardId) => {
-    res.json({playerId: playerId, boardId: boardId});
+    if (boardId) {
+      return Board.insertNewPlayer(boardId, playerId, req.body.name)
+      .then(() => {
+        res.json({playerId: playerId, boardId: boardId});
+      });
+    } else {
+      return Board.createBoardWithOnePlayer(playerId, req.body.name)
+      .then((boardId) => {
+        res.json({playerId: playerId, boardId: boardId});
+      });
+    }
+  })
+  .catch((err) => {
+    console.error(err);
   });
 };
 
