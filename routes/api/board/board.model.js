@@ -125,7 +125,7 @@ BoardSchema.statics.updateNextMove = function(boardIdHexString, playerIdHexStrin
   return this.update({
     _id: boardId,
     'players.id': playerId,
-    round: nextRound - 1
+    round: nextRound,
   }, {
     $set: {
       'players.$._nextMove': {

@@ -63,6 +63,8 @@ controller.nextMove = (req, res) => {
     if (result && 1 === result.nModified) {
       return res.sendStatus(204);  
     } else {
+      console.error(result);
+      console.error(req.body);
       return res.status(400).send('something wrong happens...');
     }
   });
