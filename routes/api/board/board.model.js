@@ -4,26 +4,33 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const ObjectId = mongoose.Types.ObjectId;
 
+const PlayerScheme = new Schema({
+  id: { type: Schema.Types.ObjectId },
+  name: { type: String, },
+  x: { type: Number, },
+  y: { type: Number, },
+}, { _id : false });
+
+const GoalSchema = new Schema({
+  x: { type: Number, },
+  y: { type: Number, },
+  is_achieved: { type: Boolean, }
+}, { _id : false });
+
 let BoardSchema = new Schema({
   board: {
-    width: { type: Number, },
-    height: { type: Number, },
+    width: { type: Number, default: 100, },
+    height: { type: Number, default: 100, },
   },
-  round: { type: Number, },
-  players: [{
-    id: { type: Schema.Types.ObjectId },
-    name: { type: String, },
-    x: { type: Number, },
-    y: { type: Number, },
-  }],
-  goals: [{
-    x: { type: Number, },
-    y: { type: Number, },
-    is_achieved: { type: Boolean, }
-  }],
+  round: { type: Number, default: 0, },
+  players: [PlayerScheme],
+  goals: [GoalSchema],
   origin: {
-    x: { type: Number, },
-    y: { type: Number, },
+    x: { type: Number, default: 5 },
+    y: { type: Number, default: 5 },
+  },
+  status: {
+    type: String, default: 'ongoing', enum: ['ongoing', 'lose', 'win'],
   }
 });
 
@@ -36,8 +43,8 @@ BoardSchema.statics.createBoardWithOnePlayer = function(playerName) {
   return this.create({
     _id: boardId,
     board: {
-      width: 40,
-      height: 40
+      width: 100,
+      height: 100
     },
     players: [{
       id: playerId,
