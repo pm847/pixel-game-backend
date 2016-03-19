@@ -78,7 +78,7 @@ BoardSchema.statics.createBoardWithOnePlayer = function(playerIdHexString, playe
 BoardSchema.statics.findAvailableBoard = function() {
   return this.findOne({
     numOfPlayers: {
-      $lt: 20
+      $lt: 30000
     },
     status: 'ongoing'
   })
