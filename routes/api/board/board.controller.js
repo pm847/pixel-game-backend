@@ -29,7 +29,15 @@ controller.nextMove = (req, res) => {
   assert(req.body.nextMove.x, 'missing nextMove.x');
   assert(req.body.nextMove.y, 'missing nextMove.y');
 
-  return res.sendStatus(200);
+  Board.updateNextMove(req.body.boardId, req.body.userId,
+    req.body.nextRound, req.body.nextMove.x, req.body.nextMove.y)
+  .then((result) => {
+    if (result && 1 === result.nModified) {
+      return res.sendStatus(204);  
+    } else {
+      return res.status(400).send('something wrong happens...');
+    }
+  });
 };
 
 module.exports = exports = controller;

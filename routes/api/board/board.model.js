@@ -9,6 +9,10 @@ const PlayerScheme = new Schema({
   name: { type: String, },
   x: { type: Number, },
   y: { type: Number, },
+  _nextMove: {
+    x: { type: Number, },
+    y: { type: Number, },
+  },
 }, { _id : false });
 
 const GoalSchema = new Schema({
@@ -97,6 +101,32 @@ BoardSchema.statics.insertNewPlayer = function(boardIdHexString, playerIdHexStri
     $inc: {
       numOfPlayers: 1
     }
+  });
+};
+
+/**
+ * @param {string} boardIdHexString
+ * @param {string} playerIdHexString
+ * @param {number} nextRound
+ * @param {number} nextX
+ * @param {number} nextY
+ */
+BoardSchema.statics.updateNextMove = function(boardIdHexString, playerIdHexString,
+  nextRound, nextX, nextY) {
+  let boardId = new ObjectId(boardIdHexString);
+  let playerId = new ObjectId(playerIdHexString);
+
+  return this.update({
+    _id: boardId,
+    'players.id': playerId,
+    round: nextRound - 1
+  }, {
+    $set: {
+      'players.$._nextMove': {
+        x: nextX,
+        y: nextY,
+      }
+    },
   });
 };
 
