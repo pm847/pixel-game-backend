@@ -10,12 +10,12 @@ controller.newPlayer = (req, res) => {
     if (boardId) {
       return Board.insertNewPlayer(boardId, playerId, req.body.name)
       .then(() => {
-        res.json({playerId: playerId, boardId: boardId});
+        res.json({userId: playerId, boardId: boardId});
       });
     } else {
       return Board.createBoardWithOnePlayer(playerId, req.body.name)
       .then((boardId) => {
-        res.json({playerId: playerId, boardId: boardId});
+        res.json({userId: playerId, boardId: boardId});
       });
     }
   })
