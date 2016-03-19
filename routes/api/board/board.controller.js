@@ -15,9 +15,18 @@ controller.getBoard = (req, res) => {
       // check timer expires or not
       let current = new Date();
       if (current.getTime() > board._nextRoundDeadline.getTime()){
+        // 0) remove duplicated players
+        let idMap = {};
+        board.players = board.players.filter((player) => {
+          // dup is found
+          if (player.id && idMap[player.id])
+            return false;
+          idMap[player.id] = true;
+          return true;
+        });
+
         // 1) update next move
-        board.players = board.players
-        .filter((player) => (player))
+        board.players = board.players.filter((player) => (player))
         .map((player) => {
           return {
             id: player.id,
