@@ -3,10 +3,12 @@ const router = express.Router();
 
 const controller = require('./user.controller');
 
+const Board = require('../board/board.model');
+
 router.post('/', (req, res) => {
-  res.json({
-    userId: 'abcd-efgh',
-    boardId: 'asdfasdf',
+  return Board.createBoardWithOnePlayer(req.body.name)
+  .then((result) => {
+    res.json(result);
   });
 });
 
