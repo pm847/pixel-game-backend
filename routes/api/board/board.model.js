@@ -137,13 +137,33 @@ BoardSchema.statics.updateNextMove = function(boardIdHexString, playerIdHexStrin
 };
 
 
+BoardSchema.statics.removePlayer = function(boardIdHexString, playerIdHexString) {
+  let boardId = new ObjectId(boardIdHexString);
+  let playerId = new ObjectId(playerIdHexString);
+
+  return this.update({
+    _id: boardId,
+    'players.id': playerId,
+  }, {
+    $unset: {
+      'players.$': '',
+    },
+    $inc: {
+      numOfPlayers: -1,
+    }
+  });
+};
+
+
 BoardSchema.methods.toTidyObject = function() {
   let result = this.toObject();
   result.id = result._id.toString();
   delete result._id;
   if ('__v' in result)
     delete result.__v;
-  result.players = result.players.map((player) => ({
+  result.players = result.players
+  .filter((player) => (player))
+  .map((player) => ({
     id: player.id,
     name: player.name,
     x: player.x,

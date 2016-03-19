@@ -1,3 +1,7 @@
+'use strict';
+
+const assert = require('assert');
+
 const Board = require('../board/board.model');
 const User = require('./user.model');
 
@@ -21,6 +25,17 @@ controller.newPlayer = (req, res) => {
   })
   .catch((err) => {
     console.error(err);
+  });
+};
+
+controller.removePlayer = (req, res) => {
+  assert(req.query.user_id, 'missing user_id');
+  assert(/^[0-9a-fA-F]{24}$/.test(req.query.user_id), 'invalid user_id');
+  assert(req.query.board_id, 'missing board_id');
+  assert(/^[0-9a-fA-F]{24}$/.test(req.query.board_id), 'invalid board_id');
+  Board.removePlayer(req.query.board_id, req.query.user_id)
+  .then(() => {
+    return res.status(204).send();
   });
 };
 

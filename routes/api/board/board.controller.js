@@ -16,7 +16,9 @@ controller.getBoard = (req, res) => {
       let current = new Date();
       if (current.getTime() > board._nextRoundDeadline.getTime()){
         // 1) update next move
-        board.players = board.players.map((player) => {
+        board.players = board.players
+        .filter((player) => (player))
+        .map((player) => {
           return {
             id: player.id,
             name: player.name,
@@ -27,11 +29,7 @@ controller.getBoard = (req, res) => {
 
         // 2) compute Result
         let tidyBoard = board.toTidyObject();
-        console.log('tidyBoard');
-        console.dir(tidyBoard);
         let result = computeResult(tidyBoard);
-        console.log('result');
-        console.dir(result);
 
         // 3) write back to DB
         return board.nextRound(result.players, result.status)
