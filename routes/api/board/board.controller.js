@@ -1,7 +1,10 @@
+'use strict';
+
 const assert = require('assert');
 
 const Board = require('../board/board.model');
 const mockBoard = require('./mock.json');
+const computeResult = require('../../../lib/game');
 
 const controller = {};
 
@@ -10,6 +13,8 @@ controller.getBoard = (req, res) => {
   .then((result) => {
     if (result) {
       result = result.toTidyObject();
+      let afterCompute = computeResult(result);
+      console.error(afterCompute);
       return res.status(200).json(result);
     } else {
       return res.status(200).json(mockBoard);
