@@ -9,11 +9,7 @@ controller.getBoard = (req, res) => {
   Board.findById(req.query.board_id)
   .then((result) => {
     if (result) {
-      result = result.toObject();
-      result.id = result._id.toString();
-      delete result._id;
-      if ('__v' in result)
-        delete result.__v;
+      result = result.toTidyObject();
       return res.status(200).json(result);
     } else {
       return res.status(200).json(mockBoard);

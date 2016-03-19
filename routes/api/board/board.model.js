@@ -6,7 +6,7 @@ const ObjectId = mongoose.Types.ObjectId;
 
 const PlayerScheme = new Schema({
   id: { type: Schema.Types.ObjectId },
-  name: { type: String, },
+  name: { type: String, default: 'Ms. Anonymous'},
   x: { type: Number, },
   y: { type: Number, },
   _nextMove: {
@@ -128,6 +128,22 @@ BoardSchema.statics.updateNextMove = function(boardIdHexString, playerIdHexStrin
       }
     },
   });
+};
+
+
+BoardSchema.methods.toTidyObject = function() {
+  let result = this.toObject();
+  result.id = result._id.toString();
+  delete result._id;
+  if ('__v' in result)
+    delete result.__v;
+  result.players = result.players.map((player) => ({
+    id: player.id,
+    name: player.name,
+    x: player.x,
+    y: player.y
+  }));
+  return result;
 };
 
 const Board = mongoose.model('Board', BoardSchema);
