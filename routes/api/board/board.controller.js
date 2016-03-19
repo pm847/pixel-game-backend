@@ -27,7 +27,11 @@ controller.getBoard = (req, res) => {
 
         // 2) compute Result
         let tidyBoard = board.toTidyObject();
+        console.log('tidyBoard');
+        console.dir(tidyBoard);
         let result = computeResult(tidyBoard);
+        console.log('result');
+        console.dir(result);
 
         // 3) write back to DB
         return board.nextRound(result.players, result.status)

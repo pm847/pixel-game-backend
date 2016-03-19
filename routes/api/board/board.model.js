@@ -25,8 +25,8 @@ const GoalSchema = new Schema({
 
 let BoardSchema = new Schema({
   board: {
-    width: { type: Number, default: 100, },
-    height: { type: Number, default: 100, },
+    width: { type: Number, default: 40, },
+    height: { type: Number, default: 40, },
   },
   round: { type: Number, default: 0, },
   players: [PlayerScheme],
@@ -52,8 +52,8 @@ BoardSchema.statics.createBoardWithOnePlayer = function(playerIdHexString, playe
   return this.create({
     _id: boardId,
     board: {
-      width: 100,
-      height: 100
+      width: 40,
+      height: 40
     },
     players: [{
       id: playerId,
