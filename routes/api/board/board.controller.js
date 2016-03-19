@@ -24,7 +24,7 @@ controller.getBoard = (req, res) => {
             y: (player._nextMove && player._nextMove.y) || player.y,
           };
         });
-        
+
         // 2) compute Result
         let tidyBoard = board.toTidyObject();
         let result = computeResult(tidyBoard);
@@ -55,11 +55,11 @@ controller.nextMove = (req, res) => {
   assert(/^[0-9a-fA-F]{24}$/.test(req.body.boardId), 'invalid boardId');
   assert(req.body.nextRound, 'missing nextRound');
   assert(req.body.nextMove, 'missing nextMove');
-  assert(req.body.nextMove.x, 'missing nextMove.x');
-  assert(req.body.nextMove.y, 'missing nextMove.y');
+  assert(req.body.nextMoveX, 'missing nextMoveX');
+  assert(req.body.nextMoveY, 'missing nextMoveY');
 
   Board.updateNextMove(req.body.boardId, req.body.userId,
-    req.body.nextRound, req.body.nextMove.x, req.body.nextMove.y)
+    req.body.nextRound, req.body.nextMoveX, req.body.nextMoveY)
   .then((result) => {
     if (result && 1 === result.nModified) {
       return res.sendStatus(204);  
