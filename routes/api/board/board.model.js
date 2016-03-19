@@ -4,6 +4,8 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const ObjectId = mongoose.Types.ObjectId;
 
+const timer = require('../../../lib/timer');
+
 const PlayerScheme = new Schema({
   id: { type: Schema.Types.ObjectId },
   name: { type: String, default: 'Ms. Anonymous'},
@@ -36,7 +38,8 @@ let BoardSchema = new Schema({
   },
   status: {
     type: String, default: 'ongoing', enum: ['ongoing', 'lose', 'win'],
-  }
+  },
+  _nextRoundDeadline: { type: Date, required: true, },
 });
 
 /**
@@ -45,6 +48,7 @@ let BoardSchema = new Schema({
 BoardSchema.statics.createBoardWithOnePlayer = function(playerIdHexString, playerName) {
   let boardId = new ObjectId();
   let playerId = new ObjectId(playerIdHexString);
+  
   return this.create({
     _id: boardId,
     board: {
@@ -62,7 +66,8 @@ BoardSchema.statics.createBoardWithOnePlayer = function(playerIdHexString, playe
       x: 10,
       y: 20,
       is_achieved: false
-    }]
+    }],
+    _nextRoundDeadline: timer.nextTenSeconds(new Date())
   })
   .then(() => (boardId.toString()));
 };
@@ -145,6 +150,20 @@ BoardSchema.methods.toTidyObject = function() {
     y: player.y
   }));
   return result;
+};
+
+BoardSchema.methods.nextRound = function(players, status) {
+  return this.update({
+    $set: {
+      players: players,
+      status: status,
+      _nextRoundDeadline: timer.nextTenSeconds(new Date())
+    },
+    $inc: {
+      round: 1
+    }
+  })
+  .exec();
 };
 
 const Board = mongoose.model('Board', BoardSchema);

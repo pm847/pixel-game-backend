@@ -1,0 +1,30 @@
+{
+  "_nextRoundDeadline": "2016-03-19T16:08:49.871Z",
+  "status": "win",
+  "origin": {
+    "y": 5,
+    "x": 5
+  },
+  "goals": [
+    {
+      "x": 10,
+      "y": 20,
+      "is_achieved": false
+    }
+  ],
+  "numOfPlayers": 1,
+  "players": [
+    {
+      "id": "56ed797d26a29763c6862089",
+      "name": "Ms. Anonymous",
+      "x": 5,
+      "y": 5
+    }
+  ],
+  "round": 1,
+  "board": {
+    "height": 100,
+    "width": 100
+  },
+  "id": "56ed797d26a29763c686208a"
+}

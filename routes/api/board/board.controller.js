@@ -11,12 +11,34 @@ const controller = {};
 controller.getBoard = (req, res) => {
   if (/^[0-9a-fA-F]{24}$/.test(req.query.board_id)){
     Board.findById(req.query.board_id)
+    .then((board) => {
+      // check timer expires or not
+      let current = new Date();
+      if (current.getTime() > board._nextRoundDeadline.getTime()){
+        // 1) update next move
+        board.players = board.players.map((player) => {
+          return {
+            id: player.id,
+            name: player.name,
+            x: (player._nextMove && player._nextMove.x) || player.x,
+            y: (player._nextMove && player._nextMove.y) || player.y,
+          };
+        });
+        
+        // 2) compute Result
+        let tidyBoard = board.toTidyObject();
+        let result = computeResult(tidyBoard);
+
+        // 3) write back to DB
+        return board.nextRound(result.players, result.status)
+        .then(() => Board.findById(req.query.board_id));
+      }
+      return board;
+    })
     .then((result) => {
       if (result) {
         result = result.toTidyObject();
-        let afterCompute = computeResult(result);
-        console.error(afterCompute);
-        return res.status(200).json(afterCompute);
+        return res.status(200).json(result);
       } else {
         return res.status(200).json(mockBoard);
       }
