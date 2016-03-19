@@ -74,7 +74,8 @@ BoardSchema.statics.findAvailableBoard = function() {
   return this.findOne({
     numOfPlayers: {
       $lt: 20
-    }
+    },
+    status: 'ongoing'
   })
   .then((board) => {
     if (board)

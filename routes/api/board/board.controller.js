@@ -9,22 +9,28 @@ const computeResult = require('../../../lib/game');
 const controller = {};
 
 controller.getBoard = (req, res) => {
-  Board.findById(req.query.board_id)
-  .then((result) => {
-    if (result) {
-      result = result.toTidyObject();
-      let afterCompute = computeResult(result);
-      console.error(afterCompute);
-      return res.status(200).json(result);
-    } else {
-      return res.status(200).json(mockBoard);
-    }
-  });
+  if (/^[0-9a-fA-F]{24}$/.test(req.query.board_id)){
+    Board.findById(req.query.board_id)
+    .then((result) => {
+      if (result) {
+        result = result.toTidyObject();
+        let afterCompute = computeResult(result);
+        console.error(afterCompute);
+        return res.status(200).json(afterCompute);
+      } else {
+        return res.status(200).json(mockBoard);
+      }
+    });
+  } else {
+    return res.status(200).json(mockBoard);
+  }
 };
 
 controller.nextMove = (req, res) => {
   assert(req.body.userId, 'missing userId');
+  assert(/^[0-9a-fA-F]{24}$/.test(req.body.userId), 'invalid userId');
   assert(req.body.boardId, 'missing boardId');
+  assert(/^[0-9a-fA-F]{24}$/.test(req.body.boardId), 'invalid boardId');
   assert(req.body.nextRound, 'missing nextRound');
   assert(req.body.nextMove, 'missing nextMove');
   assert(req.body.nextMove.x, 'missing nextMove.x');
