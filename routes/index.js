@@ -1,15 +1,13 @@
-var express = require('express');
-var router = express.Router();
-var board = require('../lib/board');
+const express = require('express');
+const router = express.Router();
+
+const api = require('./api');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
 
-// get board
-router.get('/board', (req, res) => {
-    res.json(board.getBoard());
-});
+router.use('/api', api);
 
 module.exports = router;
