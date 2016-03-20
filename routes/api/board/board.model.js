@@ -64,7 +64,7 @@ BoardSchema.statics.createBoardWithOnePlayer = function(playerIdHexString, playe
     numOfPlayers: 1,
     goals: [{
       x: 10,
-      y: 20,
+      y: 10,
       is_achieved: false
     }],
     _nextRoundDeadline: timer.nextTenSeconds(new Date())
