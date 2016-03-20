@@ -19,7 +19,7 @@ controller.getBoard = (req, res) => {
         let idMap = {};
         board.players = board.players.filter((player) => {
           // dup is found
-          if (player.id && idMap[player.id])
+          if (!player || (player.id && idMap[player.id]))
             return false;
           idMap[player.id] = true;
           return true;
