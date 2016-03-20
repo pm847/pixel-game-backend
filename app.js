@@ -5,12 +5,13 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var cors = require('cors');
+var config = require('./config.json');
 
 var routes = require('./routes');
 
 var mongoose = require('mongoose');
 
-mongoose.connect('mongodb://127.0.0.1:27017/pm847');
+mongoose.connect(config.db);
 
 var app = express();
 app.use(cors());
